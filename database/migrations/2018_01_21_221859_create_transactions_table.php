@@ -15,9 +15,22 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->enum('type',['I','O','T']);
+            $table->double('amount', 10, 2);
+            $table->double('total_before', 10, 2);
+            $table->double('total_after', 10, 2);
+            $table->integer('user_id_transaction')->nullable();
+            $table->date('date');
             $table->timestamps();
         });
+
+        Schema::table('transactions', function($table){
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
     }
+
+
 
     /**
      * Reverse the migrations.
